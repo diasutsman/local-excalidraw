@@ -5,7 +5,7 @@ const App = () => {
 		React.createElement(
 			"div",
 			{
-				style: { height: "500px" },
+				style: { height: "100dvh", width: "100dvw" },
 			},
 			React.createElement(ExcalidrawLib.Excalidraw, {
 				initialData: {
@@ -20,6 +20,7 @@ const App = () => {
 						}
 					})(),
 				},
+				theme: "dark", // Add this line to enforce dark mode
 				onChange: (elements) => {
 					console.log("Change detected, elements:", elements);
 					try {
