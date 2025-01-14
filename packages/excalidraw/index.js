@@ -21,6 +21,7 @@ const App = () => {
 					})(),
 				},
 				theme: "dark", // Add this line to enforce dark mode
+				autoFocus: true, // Automatically focuses on the canvas
 				onChange: (elements) => {
 					console.log("Change detected, elements:", elements);
 					try {
