@@ -1,41 +1,56 @@
-import { ExcalidrawInitialDataState } from "@excalidraw/excalidraw/types/types";
+import {
+	AppState,
+	BinaryFiles,
+	ExcalidrawInitialDataState,
+} from "@excalidraw/excalidraw/types/types";
 import "./App.css";
 import { Excalidraw } from "@excalidraw/excalidraw";
 import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
+import { useCallback } from "react";
 
 function App() {
-	const initialData: ExcalidrawInitialDataState = {
-		elements: (() => {
-			try {
-				const saved = localStorage.getItem("excalidraw-drawings");
-				console.log("Loading initial data:", saved);
-				return saved ? JSON.parse(saved) : [];
-			} catch (error) {
-				console.error("Error loading initial data:", error);
-				return [];
-			}
-		})(),
-	};
-	const onChange = (elements: readonly ExcalidrawElement[]) => {
-		console.log("Change detected, elements:", elements);
+	const loadInitialData = useCallback((): ExcalidrawInitialDataState => {
 		try {
-			localStorage.setItem("excalidraw-drawings", JSON.stringify(elements));
-			console.log("Successfully saved to localStorage");
+			const savedData = localStorage.getItem("excalidraw-data");
+			if (!savedData) return { elements: [] };
+
+			return JSON.parse(savedData);
 		} catch (error) {
-			console.error("Error saving scene:", error);
+			console.error("Error loading data:", error);
+			return { elements: [] };
 		}
-	};
+	}, []);
+
+	const onChange = useCallback(
+		(
+			elements: readonly ExcalidrawElement[],
+			_appState: AppState,
+			files: BinaryFiles
+		) => {
+			try {
+				const saveData = {
+					elements,
+					files,
+				};
+
+				localStorage.setItem("excalidraw-data", JSON.stringify(saveData));
+				console.log("Saved successfully");
+			} catch (error) {
+				console.error("Error saving:", error);
+			}
+		},
+		[]
+	);
+
 	return (
-		<>
-			<div style={{ height: "100dvh", width: "100dvw" }}>
-				<Excalidraw
-					theme="dark"
-					autoFocus={true}
-					initialData={initialData}
-					onChange={onChange}
-				/>
-			</div>
-		</>
+		<div style={{ height: "100dvh", width: "100dvw" }}>
+			<Excalidraw
+				theme="dark"
+				autoFocus
+				initialData={loadInitialData()}
+				onChange={onChange}
+			/>
+		</div>
 	);
 }
 
