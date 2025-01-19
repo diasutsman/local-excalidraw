@@ -3,8 +3,15 @@ import {
 	BinaryFiles,
 	ExcalidrawInitialDataState,
 } from "@excalidraw/excalidraw/types/types";
+import dynamic from "next/dynamic";
+
 import "./App.css";
-import { Excalidraw } from "@excalidraw/excalidraw";
+const Excalidraw = dynamic(
+	async () => (await import("@excalidraw/excalidraw")).Excalidraw,
+	{
+		ssr: false,
+	}
+);
 import { ExcalidrawElement } from "@excalidraw/excalidraw/types/element/types";
 import { useCallback } from "react";
 

@@ -1,3 +1,4 @@
+window.EXCALIDRAW_ASSET_PATH = "node_modules/@excalidraw/excalidraw/dist";
 const App = () => {
 	return React.createElement(
 		React.Fragment,

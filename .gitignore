@@ -23,3 +23,9 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+
+# Next JS
+.next
+next-env.d.ts
+dist
