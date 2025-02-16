@@ -4,7 +4,6 @@ import {
 	ExcalidrawInitialDataState,
 } from "@excalidraw/excalidraw/types/types";
 import dynamic from "next/dynamic";
-
 import "./App.css";
 const Excalidraw = dynamic(
 	async () => (await import("@excalidraw/excalidraw")).Excalidraw,
@@ -19,24 +18,33 @@ function App() {
 	const loadInitialData = useCallback((): ExcalidrawInitialDataState => {
 		try {
 			const savedData = localStorage.getItem("excalidraw-data");
-			if (!savedData) return { elements: [] };
+			if (!savedData) return { elements: [], appState: {}, files: {} };
 
-			return JSON.parse(savedData);
+			const parsedData = JSON.parse(savedData);
+			parsedData.appState.collaborators = [];
+			return {
+				elements: parsedData.elements || [],
+				appState: parsedData.appState || {
+					collaborators: [],
+				},
+				files: parsedData.files || {},
+			};
 		} catch (error) {
 			console.error("Error loading data:", error);
-			return { elements: [] };
+			return { elements: [], appState: {}, files: {} };
 		}
 	}, []);
 
 	const onChange = useCallback(
 		(
 			elements: readonly ExcalidrawElement[],
-			_appState: AppState,
+			appState: AppState,
 			files: BinaryFiles
 		) => {
 			try {
 				const saveData = {
 					elements,
+					appState, // This includes view position, zoom, and text styles
 					files,
 				};
 
