@@ -7,5 +7,6 @@ export default defineConfig({
 	define: {
 		"process.env.IS_PREACT": JSON.stringify("false"),
 		"process.env.NODE_ENV": JSON.stringify("production"),
+		"process.env.__NEXT_PRIVATE_PREBUNDLED_REACT": "next",
 	},
 });
